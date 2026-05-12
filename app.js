@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !="production"){
+if (process.env.NODE_ENV != "production") {
 
     require('dotenv').config();
 }
@@ -45,11 +45,11 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, 'public')));
 
 const store = MongoStore.create({
-    mongoUrl : dbUrl,
+    mongoUrl: dbUrl,
     crypto: {
         secret: process.env.SECRET,
     },
-    touchAfter: 24 * 3600 ,// time period in seconds
+    touchAfter: 24 * 3600,// time period in seconds
 });
 
 store.on("error", () => {
@@ -58,14 +58,14 @@ store.on("error", () => {
 
 const sessionOptions = {
     store,
-    secret:process.env.SECRET,
-    resave : false,
-    saveUninitialized:true,
-    cookie:{
-        expires: Date.now() + 7 * 24* 60 * 60 * 1000,
-    maxAge:  7 * 24* 60 * 60 * 1000,
-    httpOnly :true
-},
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    },
 };
 
 // app.get('/', (req, res) => {
@@ -86,7 +86,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next) =>{
+app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
@@ -105,7 +105,7 @@ app.use((req,res,next) =>{
 
 
 app.use("/listings", listingRouter);
-app.use("/listings/:id/reviews",reviewRouter);
+app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
 
